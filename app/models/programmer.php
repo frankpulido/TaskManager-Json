@@ -83,7 +83,7 @@ class Programmer {
                 return $programmer;
             }
         }
-        return null;  // Task not found
+        return [];  // Task not found
     }
 
     // ************************ CRUD ************************

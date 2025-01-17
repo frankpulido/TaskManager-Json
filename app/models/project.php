@@ -96,7 +96,7 @@ class Project {
                 return $project;
             }
         }
-        return null;  // Task not found
+        return [];  // Task not found
     }
 
     // ************************ CRUD ************************
