@@ -1,0 +1,77 @@
+[
+    {
+      "id_programmer": 1,
+      "programmer_name": "Jeffrey Sachs",
+      "skills": ["FRONTOFFICE", "DATABASE"]
+    },
+    {
+      "id_programmer": 2,
+      "programmer_name": "John Mearsheimer",
+      "skills": ["BACKOFFICE, DATABASE"]
+    },
+    {
+      "id_programmer": 3,
+      "programmer_name": "Richard Black",
+      "skills": ["BACKOFFICE, FRONTOFFICE"]
+    },
+    {
+      "id_programmer": 4,
+      "programmer_name": "Clare Daly",
+      "skills": ["BACKOFFICE, FRONTOFFICE, DATABASE"]
+    },
+    {
+      "id_programmer": 5,
+      "programmer_name": "Sevim Dagdelen",
+      "skills": ["BACKOFFICE, FRONTOFFICE, DATABASE"]
+    },
+    {
+      "id_programmer": 6,
+      "programmer_name": "Lawrence Wilkerson",
+      "skills": ["BACKOFFICE, FRONTOFFICE"]
+    },
+    {
+      "id_programmer": 7,
+      "programmer_name": "Ray McGovern",
+      "skills": ["DATABASE"]
+    },
+    {
+      "id_programmer": 8,
+      "programmer_name": "Larry Johnson",
+      "skills": ["BACKOFFICE, DATABASE"]
+    },
+    {
+      "id_programmer": 9,
+      "programmer_name": "Scott Ritter",
+      "skills": ["BACKOFFICE, DATABASE"]
+    },
+    {
+      "id_programmer": 10,
+      "programmer_name": "Alexander Mercouris",
+      "skills": ["BACKOFFICE, FRONTOFFICE"]
+    },
+    {
+      "id_programmer": 11,
+      "programmer_name": "Lena Petrova",
+      "skills": ["FRONTOFFICE"]
+    },
+    {
+      "id_programmer": 12,
+      "programmer_name": "Amy Goodman",
+      "skills": ["BACKOFFICE, FRONTOFFICE"]
+    },
+    {
+      "id_programmer": 13,
+      "programmer_name": "Rania Khaklek",
+      "skills": ["BACKOFFICE, FRONTOFFICE, DATABASE"]
+    },
+    {
+      "id_programmer": 14,
+      "programmer_name": "Rachel SlayBaugh",
+      "skills": ["BACKOFFICE, DATABASE"]
+    },
+    {
+      "id_programmer": 15,
+      "programmer_name": "Karolina Goswami",
+      "skills": ["FRONTOFFICE"]
+    }
+  ]
