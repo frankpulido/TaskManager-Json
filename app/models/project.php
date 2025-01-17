@@ -2,6 +2,10 @@
 declare(strict_types=1);
 
 class Project {
+    use JsonPersistence;
+    private static string $filePath = ROOT_PATH . 'app/models/data/projects.php';
+    private static string $filePathBackup = ROOT_PATH . 'app/models/data/backup_projects.php';
+
     protected int $id_project;
     protected string $project_name;
     protected string $project_brief;
@@ -13,6 +17,15 @@ class Project {
         $this->project_name = $project_brief;
         $this->manager_id = $manager_id;
         $this->delivered = false;
+    }
+
+    private function generateUniqueId() : int {
+        $data = $this->loadData(self::$filePath);
+        if (!empty($data)) {
+            $ids = array_map(fn($item) => (int)$item['id_project'], $data);
+            return max($ids) + 1;
+        }
+        return 1;
     }
 
     // Getters
@@ -70,5 +83,22 @@ class Project {
             'delivered' => $this->delivered,
         ];
     }
+
+    public function getAll() : array {
+        $allProjects = $this->loadData(self::$filePath);
+        return $allProjects;
+    }
+
+    public function getById(int $id_project) : array {
+        $projects = $this->getAll();
+        foreach ($projects as $project) {
+            if ($project['id_project'] === $id_project) {
+                return $project;
+            }
+        }
+        return null;  // Task not found
+    }
+
+    // ************************ CRUD ************************
 }
 ?>

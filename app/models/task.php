@@ -3,11 +3,16 @@ declare(strict_types=1);
 use DateTimeImmutable;
 
 final class Task {
+    use JsonPersistence;
+    private static string $filePath = ROOT_PATH . 'app/models/data/tasks.php';
+    private static string $filePathBackup = ROOT_PATH . 'app/models/data/backup_tasks.php';
+    private const ALLOWED_KINDS = ['FRONTEND', 'BACKEND', 'DATABASE'];
+
     protected int $id_task;
     protected int $project_id;
     protected int $programmer_id; // When a task is created it must have a programmer assigned, then this attribute can be changed.
     protected $task_kind; // Important : discarding the use os an enum we should somehow restrict possible values for data entry.
-    protected $task_status; // Important : discarding the use os an enum we should somehow restrict possiblevalues for data entry.
+    protected $task_status; // Important : enum discarded. Triggered by other attributes set methods.
     protected string $task_description;
     protected DateTimeImmutable $dateCreated;
     protected ?DateTime $dateInit = null;
@@ -17,10 +22,19 @@ final class Task {
     public function __construct(int $project_id, int $programmer_id, string $task_kind, string $task_description) {
         $this->project_id = $project_id;
         $this->programmer_id = $programmer_id;
-        $this->task_kind = $task_kind; // No longer an enum
+        $this->task_kind = (string) $this->setTaskKind($task_kind); // Validation
         $this->task_status = "PIPELINED"; // No longer an enum
         $this->task_description = $task_description;
         $this->dateCreated = new DateTimeImmutable();
+    }
+
+    private function generateUniqueId() : int {
+        $data = $this->loadData(self::$filePath);
+        if (!empty($data)) {
+            $ids = array_map(fn($item) => (int)$item['id_task'], $data);
+            return max($ids) + 1;
+        }
+        return 1;
     }
     
     // Getters
@@ -80,6 +94,9 @@ final class Task {
     }
 
     public function setTaskKind(string $task_kind) : void {
+        if (!in_array($task_kind, self::ALLOWED_KINDS)) {
+            throw new InvalidArgumentException("Invalid task kind: $task_kind");
+        }
         $this->task_kind = $task_kind;
     }
 
@@ -124,13 +141,22 @@ final class Task {
             'dateApproved' => $this->dateApproved ? $this->dateApproved->format(DateTime::ATOM) : null,
         ];
     }
-    // CREATING A TASK
-    /*
-    $task = new Task($projectId, $programmerId, 'FRONTOFFICE', 'INIT', 'Task description here.');
-    $taskData = $task->toArray();
-    $jsonData = json_encode($taskData, JSON_PRETTY_PRINT);
-    file_put_contents('tasks.json', $jsonData);
-    */
-}
 
+    public function getAll() : array {
+        $allTasks = $this->loadData(self::$filePath);
+        return $allTasks;
+    }
+
+    public function getById(int $id_task) : array {
+        $tasks = $this->getAll();
+        foreach ($tasks as $task) {
+            if ($task['id_task'] === $id_task) {
+                return $task;
+            }
+        }
+        return null;  // Task not found
+    }
+
+    // ************************ CRUD ************************
+}
 ?>
