@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 class Programmer {
     use JsonPersistence;
-    private static string $filePath = ROOT_PATH . 'app/models/data/programmers.php';
-    private static string $filePathBackup = ROOT_PATH . 'app/models/data/backup_programmers.php';
+    private static string $filePath = ROOT_PATH . '/app/models/data/programmers.php';
+    private static string $filePathBackup = ROOT_PATH . '/app/models/data/backup_programmers.php';
     private const ALLOWED_SKILLS = ['FRONTEND', 'BACKEND', 'DATABASE'];
 
     protected int $id_programmer;
@@ -18,9 +18,9 @@ class Programmer {
     }
 
     private function generateUniqueId() : int {
-        $data = $this->loadData(self::$filePath);
-        if (!empty($data)) {
-            $ids = array_map(fn($item) => (int)$item['id_programmer'], $data);
+        $programmers = $this->getAllProgrammers();
+        if (!empty($programmers)) {
+            $ids = array_map(fn($item) => (int)$item['id_programmer'], $programmers);
             return max($ids) + 1;
         }
         return 1;
@@ -71,13 +71,13 @@ class Programmer {
         ];
     }
 
-    public function getAll() : array {
+    public function getAllProgrammers() : array {
         $allProgrammers = $this->loadData(self::$filePath);
         return $allProgrammers;
     }
 
-    public function getById(int $id_programmer) : array {
-        $programmers = $this->getAll();
+    public function getProgrammerById(int $id_programmer) : array {
+        $programmers = $this->getAllProgrammers();
         foreach ($programmers as $programmer) {
             if ($programmer['id_programmer'] === $id_programmer) {
                 return $programmer;

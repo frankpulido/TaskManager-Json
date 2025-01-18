@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 
 trait JsonPersistence {
-    private function loadData(string $filePath) : array {
+    public function loadData(string $filePath) : array {
         if (!file_exists($filePath)) return [];
         $data = file_get_contents($filePath);
         return json_decode($data, true) ?? [];

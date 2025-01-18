@@ -1,0 +1,176 @@
+body{
+    max-width: 2000px;
+    margin: auto;
+}
+
+.rajdhani-light {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+  
+.rajdhani-regular {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+  
+.rajdhani-medium {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+  
+.rajdhani-semibold {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+  
+.rajdhani-bold {
+    font-family: "Rajdhani", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+iframe {
+    width: 100%;
+    /*padding: 10px;*/
+}
+
+form {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+form div {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center; /* Align items vertically centered */
+    padding: 15px;
+}
+
+form label {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 300;
+    margin-right: 15px; /* Space between the label and input/select */
+}
+
+form select, form input {
+    flex: 1; /* Allow input/select to take remaining space */
+    padding: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 300;
+}
+
+select.rajdhani-light, 
+option.rajdhani-light {
+    font-family: 'Rajdhani', sans-serif !important;
+    font-weight: 300 !important; /* Ensure you're using the 'light' weight */
+}
+
+header{
+    background-color: rgba(246, 214, 97,0.5);
+    /*display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;*/
+    padding: 20px;
+}
+.header-container {
+    display: grid;
+    grid-template-columns: 1fr 2.5fr 2fr;
+    align-items: center; /*I added this and made the changes commenting header above*/
+    gap: 10px;
+    padding: 0px;
+    margin: 10px 10px;
+}
+.views-menu{
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start; /*added this to align items on the left*/
+    justify-content: center; /* Center the menu items vertically... I had space-around*/
+    height: 100%;
+}
+.menu{
+    display:flex;
+    justify-content: center; /* Center the menu items */
+    flex-wrap: wrap; /* Allow items to wrap if needed */
+}
+.menu-option{
+    color: black;
+    /*color: rgba(84, 63, 129, 0.3);*/
+    /*background-color: aliceblue;*/ /*Reactivate when all CRUD work*/
+    margin: 5px 5px 5px 0px;
+    padding: 5px;
+    text-decoration: none;
+}
+.menu-option:hover{
+    color: black;
+    /*color: rgba(84, 63, 129, 0.3);*/
+    background-color: rgba(84, 63, 129, 0.3);
+}
+.iframe-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Aligns iframe to the right */
+    align-items: center; /* Centers iframe vertically */
+    background-color: aliceblue;
+}
+.container{
+    position: relative; /* https://www.w3schools.com/css/tryit.asp?filename=trycss_zindex3*/
+    background-color: aqua;
+    /*background-size:100px 200px;*/
+    padding:10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.grid-container {
+    background-color: lightgray;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 30px;
+    margin: 10px 0px;
+}
+
+.nested-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;  /* El PADDING no es necesario porque tenemos el GAP del GRID superior (grid-container) */
+}
+
+.grid-container-cases-4 {
+    background-color: lightgray;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 30px;
+    margin: 10px 0px;
+}
+
+.grid-container-cases-3 {
+    background-color: lightgray;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 30px;
+    margin: 10px 0px;
+}
+
+.nested-grid-cases {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;  /* El PADDING no es necesario porque tenemos el GAP del GRID superior (grid-container) */
+}
+
+.grid-item {
+    /*width: 100%; /* VENTAJA : Usando GRID me llenará el 100% de la columna SIEMPRE dejando sólo el GAP y sin deajustes como me ocurre al trabajar con % al usar flex */
+    background-color: aliceblue;
+    padding: 10px;
+    box-sizing: border-box;
+}

@@ -4,8 +4,8 @@ use DateTimeImmutable;
 
 final class Task {
     use JsonPersistence;
-    private static string $filePath = ROOT_PATH . 'app/models/data/tasks.php';
-    private static string $filePathBackup = ROOT_PATH . 'app/models/data/backup_tasks.php';
+    private static string $filePath = ROOT_PATH . '/app/models/data/tasks.php';
+    private static string $filePathBackup = ROOT_PATH . '/app/models/data/backup_tasks.php';
     private const ALLOWED_KINDS = ['FRONTEND', 'BACKEND', 'DATABASE'];
 
     protected int $id_task;
@@ -29,9 +29,9 @@ final class Task {
     }
 
     private function generateUniqueId() : int {
-        $data = $this->loadData(self::$filePath);
-        if (!empty($data)) {
-            $ids = array_map(fn($item) => (int)$item['id_task'], $data);
+        $tasks = $this->getAllTasks();
+        if (!empty($tasks)) {
+            $ids = array_map(fn($item) => (int)$item['id_task'], $tasks);
             return max($ids) + 1;
         }
         return 1;
@@ -151,7 +151,7 @@ final class Task {
             $taskData['task_description'] ?? '',
         );
         $task = $task->toArray();
-        $allTasks = $this->getAll();
+        $allTasks = $this->getAllTasks();
         $allTasks[] = $task;
         $this->saveData($allTasks, self::$filePath);
         return $task;
@@ -159,13 +159,13 @@ final class Task {
 
     // READ
 
-    public function getAll() : array {
+    public function getAllTasks() : array {
         $allTasks = $this->loadData(self::$filePath);
         return $allTasks;
     }
 
-    public function getById(int $id_task) : array {
-        $tasks = $this->getAll();
+    public function getTaskById(int $id_task) : array {
+        $tasks = $this->getAllTasks();
         foreach ($tasks as $task) {
             if ($task['id_task'] === $id_task) {
                 return $task;
@@ -185,7 +185,7 @@ final class Task {
     }
 
     public function updateTask(int $id_task, array $updatedData) : string {
-        $allTasks = $this->getAll();
+        $allTasks = $this->getAllTasks();
         foreach($allTasks as $task) {
             if($task['id_task'] == $id_task){
                 if(isset($updatedData['programmer_id'])) {$task['programmer_id'] = $updatedData['programmer_id'];}
@@ -198,11 +198,11 @@ final class Task {
     }
 
     public function deleteTask(int $id_task) : string {
-        $existingTask = $this->getById($id_task);
+        $existingTask = $this->getTaskById($id_task);
         if (!$existingTask) {
             return "Task with ID : $id_task wasn't found in database";
         }
-        $tasks = $this->getAll();
+        $tasks = $this->getAllTasks();
         $tasksAfterDeletion = array_filter($tasks, fn($task) => $task['id_task'] !== $id_task);
     
         $this->saveData($tasksAfterDeletion, self::$filePath);

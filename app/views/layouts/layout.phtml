@@ -1,11 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= isset($title) ? htmlspecialchars($title) : 'Developers Nivel 1 - JSON persistence' ?></title>
+    <link rel="stylesheet" href= "<?= WEB_ROOT ?>/stylesheets/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-	<?php echo $this->content(); ?>
+	<header class="rajdhani-regular">
+	<section class="header-container">
+
+		<section class="rajdhani-light">
+			<nav class="views-menu">
+				<a href="<?php echo WEB_ROOT; ?>/grid" class="menu-option" style="background-color: aliceblue;">GRID ALL VIEW</a> <!-- ELIMINATE STYLE WHEN ALL OPTIONS ARE ACTIVE -->
+				<a href="<?php echo WEB_ROOT; ?>/kind" class="menu-option" style="background-color: aliceblue;">BY TASK KIND VIEW</a> <!-- ELIMINATE STYLE WHEN ALL OPTIONS ARE ACTIVE -->
+				<a href="<?php echo WEB_ROOT; ?>/progress" class="menu-option" style="background-color: aliceblue;">BY TASK PROGRESS VIEW</a> <!-- ELIMINATE STYLE WHEN ALL OPTIONS ARE ACTIVE -->
+			</nav>
+		</section>
+
+		<section class="rajdhani-light">
+			<nav class="menu">
+				<a href="#" class="menu-option">[ NEW PROJECT ]</a>
+				<a href="javascript:void(0);" class="menu-option" style="background-color: aliceblue;" onclick="loadIframe('create_task')">[ NEW TASK ]</a> <!-- ELIMINATE STYLE WHEN ALL OPTIONS ARE ACTIVE -->
+				<a href="#" class="menu-option">[ NEW PROGRAMMER ]</a>
+			</nav>
+			<nav class="menu">
+				<a href="#" class="menu-option">[ SEARCH->UPDATE/DELETE PROJECT ]</a>
+				<a href="javascript:void(0);" class="menu-option" style="background-color: aliceblue;" onclick="loadIframe('search_update_delete_task')">[ SEARCH->UPDATE/DELETE TASK ]</a> <!-- ELIMINATE STYLE WHEN ALL OPTIONS ARE ACTIVE -->
+				<a href="#" class="menu-option">[ SEARCH->UPDATE/DELETE PROGRAMMER ]</a>
+			</nav>
+			<nav class="menu">
+				<a href="#" class="menu-option">[ FILTER BY PROJECT STATUS ]</a>
+				<a href="#" class="menu-option">[ FILTER BY PROJECT MANAGER ]</a>
+				<a href="#" class="menu-option">[ FILTER BY DEVELOPER ]</a>
+			</nav>
+		</section>
+	</section>
+	</header>
+	<main>
+		<?php echo $this->content(); ?>
+	</main>
+	
 </body>
 </html>

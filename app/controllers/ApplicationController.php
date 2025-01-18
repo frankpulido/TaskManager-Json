@@ -6,5 +6,56 @@
  */
 class ApplicationController extends Controller 
 {
-	
+    use JsonPersistence;
+    protected string $taskFilePath = ROOT_PATH . '/app/models/data/tasks.json';
+    protected string $programmerFilePath = ROOT_PATH . '/app/models/data/programmers.json';
+    protected string $projectFilePath = ROOT_PATH . '/app/models/data/projects.json';
+
+    public function indexAction()
+    {
+        $tasks = $this->loadData($this->taskFilePath);
+        $this->view->title = "View ALL in GRID";
+        $this->view->tasks = $tasks;
+    }
+
+    public function columnKindAction()
+    {
+        $tasks = $this->loadData($this->taskFilePath);
+        $categorizedTasks = [
+            'FRONTOFFICE' => [],
+            'BACKOFFICE' => [],
+            'DATABASE' => []
+        ];
+
+        foreach ($tasks as $task) {
+            $kind = $task['task_kind'];
+            if (isset($categorizedTasks[$kind])) {
+                $categorizedTasks[$kind][] = $task;
+            }
+        }
+
+        $this->view->title = "View grouped by KIND";
+        $this->view->tasks = $categorizedTasks;
+    }
+
+    public function columnProgressAction()
+    {
+        $tasks = $this->loadData($this->taskFilePath);
+        $categorizedTasks = [
+            'PIPELINED' => [],
+            'INIT' => [],
+            'DELIVERED' => [],
+            'RELEASED' => []
+        ];
+
+        foreach ($tasks as $task) {
+            $status = $task['task_status'];
+            if (isset($categorizedTasks[$status])) {
+                $categorizedTasks[$status][] = $task;
+            }
+        }
+
+        $this->view->title = "View grouped by PROGRESS";
+        $this->view->tasks = $categorizedTasks;
+    }
 }

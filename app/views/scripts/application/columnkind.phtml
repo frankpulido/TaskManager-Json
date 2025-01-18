@@ -1,0 +1,47 @@
+<?php
+$title = $this->title;
+?>
+
+<body>
+    <?php
+    $categorizedTasks = $this->tasks;
+    ?>
+
+<section class="grid-container-cases-3">
+    <?php foreach ($categorizedTasks as $kind => $tasks): ?>
+        <section class="nested-grid-cases rajdhani-light">
+            <h2><?= ucfirst(strtoupper($kind)) ?></h2>
+            <?php if (!empty($tasks)): ?>
+                <?php foreach ($tasks as $task): ?>
+                    <article class="grid-item">
+
+                        <p><b>TASK ID</b>  : <b><?= htmlspecialchars($task['id_task']) ?></b> | Project ID : <?= htmlspecialchars($task['project_id']) ?> | Programmer ID : <?= htmlspecialchars($task['programmer_id']) ?></p>
+                        <p><b><?= htmlspecialchars($task['task_kind']) ?></b> | Description : <?= htmlspecialchars($task['task_description']) ?></p>
+                        <p>Task progress : <?= htmlspecialchars($task['task_status']) ?></p>
+                        
+                        <?php
+                        if (!empty($task['dateCreated'])) {
+                            echo "<p>Pipelined : " . htmlspecialchars($task['dateCreated']) . "</p>";
+                        }
+                        if (!empty($task['dateInit'])) {
+                            echo "<p>Started : " . htmlspecialchars($task['dateInit']) . "</p>";
+                        }
+                        if (!empty($task['dateDelivered'])) {
+                            echo "<p>Delivered : " . htmlspecialchars($task['dateDelivered']) . "</p>";
+                        }
+                        if (!empty($task['dateApproved'])) {
+                            echo "<p>Released : " . htmlspecialchars($task['dateApproved']) . "</p>";
+                        }
+                        ?>
+                        
+                    </article>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No tasks in this status.</p>
+            <?php endif; ?>
+        </section>
+    <?php endforeach; ?>
+</section>
+
+</body>
+</html>

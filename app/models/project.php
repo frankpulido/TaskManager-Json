@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 class Project {
     use JsonPersistence;
-    private static string $filePath = ROOT_PATH . 'app/models/data/projects.php';
-    private static string $filePathBackup = ROOT_PATH . 'app/models/data/backup_projects.php';
+    private static string $filePath = ROOT_PATH . '/app/models/data/projects.php';
+    private static string $filePathBackup = ROOT_PATH . '/app/models/data/backup_projects.php';
 
     protected int $id_project;
     protected string $project_name;
@@ -20,9 +20,9 @@ class Project {
     }
 
     private function generateUniqueId() : int {
-        $data = $this->loadData(self::$filePath);
-        if (!empty($data)) {
-            $ids = array_map(fn($item) => (int)$item['id_project'], $data);
+        $projects = $this->getAllProjects();
+        if (!empty($projects)) {
+            $ids = array_map(fn($item) => (int)$item['id_project'], $projects);
             return max($ids) + 1;
         }
         return 1;
@@ -84,13 +84,13 @@ class Project {
         ];
     }
 
-    public function getAll() : array {
+    public function getAllProjects() : array {
         $allProjects = $this->loadData(self::$filePath);
         return $allProjects;
     }
 
-    public function getById(int $id_project) : array {
-        $projects = $this->getAll();
+    public function getProjectById(int $id_project) : array {
+        $projects = $this->getAllProjects();
         foreach ($projects as $project) {
             if ($project['id_project'] === $id_project) {
                 return $project;
