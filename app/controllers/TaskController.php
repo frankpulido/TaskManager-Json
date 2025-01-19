@@ -18,7 +18,9 @@ class TaskController extends Controller {
             }
             // Collect the data from the form
             $task = new Task($_POST['project_id'], $_POST['programmer_id'], $_POST['task_kind'], $_POST['task_description']??'');
-            $_SESSION['created_task'] = $task->storeCreatedTask();
+            $created_task = $task->storeCreatedTask();
+            $this->view->created_task = $created_task;
+            //$_SESSION['created_task'] = $task->storeCreatedTask();
             // Store the created task in a session (or pass it via query string)
             /*
             $_SESSION['created_task'] = [

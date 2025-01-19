@@ -1,12 +1,5 @@
 <?php
-/* Check if form has been submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //$taskController->execute('create');
-    exit(); // Optional: to avoid rendering the rest of create.php after execution
-}
-*/
-
-// Fetch request data
+// Fetch request data used by head
 $title = $this->title;
 ?>
 
@@ -83,15 +76,17 @@ $kinds = ['FRONTOFFICE', 'BACKOFFICE', 'DATABASE'];
 <!-- Display the created task if available -->
 
 <?php
-if (isset($_SESSION['created_task'])) {
-    $createdTask = $_SESSION['created_task'];
+//if (isset($_SESSION['created_task'])) {
+if ($this->created_task) {
+    $createdTask = $this->created_task;
+    //$createdTask = $_SESSION['created_task'];
     echo '<article class="grid-item rajdhani-light">';
     echo '<p class="rajdhani-light" style="color: green;">Your new task has been successfully created!</p>';
     echo "<p><b>TASK ID</b>  : <b>" . htmlspecialchars($createdTask['id_task']) . "</b> | Project ID : " . htmlspecialchars($createdTask['project_id']) . " | Programmer ID : " . htmlspecialchars($createdTask['programmer_id']) . "</p>";
     echo "<p><b>" . htmlspecialchars($createdTask['task_kind']) . "</b> | Task Description : " . htmlspecialchars($createdTask['task_description']) . "</p>";
     echo "<p>Task progress : " . htmlspecialchars($createdTask['task_status']) . "</p>";
     echo '</article>';
-    unset($_SESSION['created_task']); // Clear the session variable
+    //unset($_SESSION['created_task']); // Clear the session variable
 }
 ?>
 
