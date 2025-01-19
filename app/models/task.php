@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 final class Task {
     use JsonPersistence;
-    private static string $filePath = ROOT_PATH . '/app/models/data/tasks.php';
-    private static string $filePathBackup = ROOT_PATH . '/app/models/data/backup_tasks.php';
+    private static string $filePath = ROOT_PATH . '/app/models/data/tasks.json';
+    private static string $filePathBackup = ROOT_PATH . '/app/models/data/backup_tasks.json';
     private const ALLOWED_KINDS = ['FRONTOFFICE', 'BACKOFFICE', 'DATABASE'];
 
     protected int $id_task;
