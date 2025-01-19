@@ -11,17 +11,25 @@ class TaskController extends Controller {
 
         // Ensure that the form data has been submitted
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $taskDescription = $_POST['task_description'] ?? null;
+            if ($taskDescription === null || trim($taskDescription) === '') {
+                $this->view->error = "Task description is required.";
+                return;
+            }
             // Collect the data from the form
-            $taskData = [
-                'project_id' => $_POST['project_id'],
-                'programmer_id' => $_POST['programmer_id'],
-                'task_kind' => $_POST['task_kind'],
-                'task_description' => $_POST['task_description'] ?? ''
-            ];
-            $task = new Task($_POST['project_id'], $_POST['programmer_id'], $_POST['task_kind'], $_POST['task_description']);
-
+            $task = new Task($_POST['project_id'], $_POST['programmer_id'], $_POST['task_kind'], $_POST['task_description']??'');
+            $_SESSION['created_task'] = $task->storeCreatedTask();
             // Store the created task in a session (or pass it via query string)
-            $_SESSION['created_task'] = $task;
+            /*
+            $_SESSION['created_task'] = [
+                'id_task' => $task->getIdTask(),
+                'project_id' => $task->getProjectId(),
+                'programmer_id' => $task->getProgrammerId(),
+                'task_kind' => $task->getTaskKind(),
+                'task_status' => $task->getTaskStatus(),
+                'task_description' => $task->getTaskDescription(),
+            ];
+            */
         }
 
         $projects = $this->loadData($this->projectFilePath);
@@ -29,12 +37,6 @@ class TaskController extends Controller {
         $this->view->title = "CRUD Task";
         $this->view->projects = $projects;
         $this->view->programmers = $programmers;
-        //if($task) { $this->view->task = $task; }
-
-
-        // Render the create task form view
-        //$this->view->task = $task;
-        //ob_end_flush(); // Flush output buffer at the end
     }
 
     /*

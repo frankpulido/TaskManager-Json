@@ -18,10 +18,13 @@ $title = $this->title;
 $projects = $this->projects;
 $programmers = $this->programmers;
 //$task = $this->task;
-// Correct dropdown code below for enum class deletion
+// I have corrected dropdown code below for enum class deletion
 $kinds = ['FRONTOFFICE', 'BACKOFFICE', 'DATABASE'];
 ?>
 <h2 class="rajdhani-light" style="margin-left: 15px;">CREATE NEW TASK</h2>
+<?php if (isset($this->error)): ?>
+    <p class="rajdhani-light" style="color: red;"><?= htmlspecialchars($this->error) ?></p>
+<?php endif; ?>
 
 <form action="<?php echo WEB_ROOT; ?>/task/create" method="post">
 <!-- THE FORM ACTION POST TO ITSELF TO EXECUTE IF IN LINE 18 / IF REQUEST = POST THEN $taskController->execute('create'); -->
@@ -31,8 +34,6 @@ $kinds = ['FRONTOFFICE', 'BACKOFFICE', 'DATABASE'];
         <label for="project_id" class="rajdhani-light">PROJECT :</label>
         <select id="project_id" name="project_id" class="rajdhani-light" required>
             <?php
-            // Fetch existing projects through TaskManager
-            //$projects = $taskManager->getAllProjects();
             foreach ($projects as $project) {
                 echo "<option value=\"{$project['id_project']}\">{$project['project_name']}</option>";
             }
@@ -45,8 +46,6 @@ $kinds = ['FRONTOFFICE', 'BACKOFFICE', 'DATABASE'];
         <label for="programmer_id" class="rajdhani-light" >PROGRAMMER :</label>
         <select id="programmer_id" name="programmer_id" class="rajdhani-light" required>
             <?php
-            // Fetch existing programmers through TaskManager
-            //$programmers = $taskManager->getAllProgrammers();
             foreach ($programmers as $programmer) {
                 echo "<option value=\"{$programmer['id_programmer']}\">{$programmer['programmer_name']}</option>";
             }
@@ -88,9 +87,9 @@ if (isset($_SESSION['created_task'])) {
     $createdTask = $_SESSION['created_task'];
     echo '<article class="grid-item rajdhani-light">';
     echo '<p class="rajdhani-light" style="color: green;">Your new task has been successfully created!</p>';
-    echo "<p><b>TASK ID</b>  : <b>" . htmlspecialchars($createdTask->getIdTask()) . "</b> | Project ID : " . htmlspecialchars($createdTask->getProjectId()) . " | Programmer ID : " . htmlspecialchars($createdTask->getProgrammerId()) . "</p>";
-    echo "<p><b>" . htmlspecialchars($createdTask->getTaskKind()->value) . "</b> | Task Description : " . htmlspecialchars($createdTask->getTaskDescription()) . "</p>";
-    echo "<p>Task progress : " . htmlspecialchars($createdTask->getTaskStatus()->value) . "</p>";
+    echo "<p><b>TASK ID</b>  : <b>" . htmlspecialchars($createdTask['id_task']) . "</b> | Project ID : " . htmlspecialchars($createdTask['project_id']) . " | Programmer ID : " . htmlspecialchars($createdTask['programmer_id']) . "</p>";
+    echo "<p><b>" . htmlspecialchars($createdTask['task_kind']) . "</b> | Task Description : " . htmlspecialchars($createdTask['task_description']) . "</p>";
+    echo "<p>Task progress : " . htmlspecialchars($createdTask['task_status']) . "</p>";
     echo '</article>';
     unset($_SESSION['created_task']); // Clear the session variable
 }

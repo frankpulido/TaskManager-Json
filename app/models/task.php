@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-use DateTimeImmutable;
+//use DateTimeImmutable;
 
 final class Task {
     use JsonPersistence;
     private static string $filePath = ROOT_PATH . '/app/models/data/tasks.php';
     private static string $filePathBackup = ROOT_PATH . '/app/models/data/backup_tasks.php';
-    private const ALLOWED_KINDS = ['FRONTEND', 'BACKEND', 'DATABASE'];
+    private const ALLOWED_KINDS = ['FRONTOFFICE', 'BACKOFFICE', 'DATABASE'];
 
     protected int $id_task;
     protected int $project_id;
@@ -20,6 +20,7 @@ final class Task {
     protected ?DateTime $dateApproved = null;
 
     public function __construct(int $project_id, int $programmer_id, string $task_kind, string $task_description) {
+        $this->id_task = $this->generateUniqueId();
         $this->project_id = $project_id;
         $this->programmer_id = $programmer_id;
         $this->task_kind = (string) $this->setTaskKind($task_kind); // Validation
@@ -143,6 +144,15 @@ final class Task {
 
     // CREATE
 
+    public function storeCreatedTask() : array { // This funtion is to CREATE in json file
+        $taskData = $this->toArray();
+        $allTasks = $this->getAllTasks();
+        $allTasks[] = $taskData;
+        $this->saveData($allTasks, self::$filePath);
+        return $taskData;
+    }
+
+    /*
     public function createTask(array $taskData) : array {
         $task = new Task(
             (int) $taskData['project_id'],
@@ -156,6 +166,7 @@ final class Task {
         $this->saveData($allTasks, self::$filePath);
         return $task;
     }
+    */
 
     // READ
 
