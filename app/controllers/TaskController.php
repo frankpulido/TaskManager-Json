@@ -41,40 +41,43 @@ class TaskController extends Controller {
         $this->view->programmers = $programmers;
     }
 
-    /*
 
     public function getAllAction(){
+        /*
         if (ob_get_level()) {
             ob_end_flush();
         }
-
-        // Call the TaskManager's getAllTasks method
         $taskManager = TaskManager::getInstance();
         $tasks = $taskManager->getAllTasks();
-
+        */
+        $tasks = $this->loadData($this->taskFilePath);
         // Store the created task in a session (or pass it via query string)
-        $_SESSION['all_tasks'] = $tasks;
+        //$_SESSION['all_tasks'] = $tasks;
     }
 
     public function showAction() {
 
+        $selected_task = [];
+        //$selected_task = null;
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_task'])) {
-            $taskId = (int) $_POST['id_task'];
-    
-            $taskManager = TaskManager::getInstance();
-            $task = $taskManager->getTaskById($taskId);
-    
-            if ($task) {
-                $_SESSION['selected_task'] = $task; // Store task for use in show.php
-            } else {
-                $_SESSION['selected_task'] = null; // Handle case if task not found
+            
+            $id_task = (int) $_POST['id_task'];
+            $tasks = $this->loadData($this->taskFilePath);
+            foreach ($tasks as $task) {
+                if ($task['id_task'] === $id_task) {
+                    $selected_task = $task;
+                    break;
+                }
+                //$_SESSION['selected_task'] = null; // Handle case if task not found
             }
         }
-    
         // Render the show task view
-        $this->view->render('crudtask/show.php');
+        $this->view->selected_task = $selected_task;
+        //$this->view->render('crudtask/show.php');
     }
-
+    
+    /*
     public function updateAction() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_task'], $_POST['assigned_programmer'])) {
             $taskId = (int)$_POST['id_task'];

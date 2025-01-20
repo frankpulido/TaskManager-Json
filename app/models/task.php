@@ -175,6 +175,7 @@ final class Task {
         return $allTasks;
     }
 
+    // This method below (getTaskById) won't probably be used... Handled directly from Controller showAction()
     public function getTaskById(int $id_task) : array {
         $tasks = $this->getAllTasks();
         foreach ($tasks as $task) {

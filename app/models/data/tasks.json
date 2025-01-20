@@ -178,5 +178,17 @@
         "dateInit": null,
         "dateDelivered": null,
         "dateApproved": null
+    },
+    {
+        "id_task": 116,
+        "project_id": 5,
+        "programmer_id": 5,
+        "task_kind": "",
+        "task_status": "PIPELINED",
+        "task_description": "Task Manager finally working as expected (116) - Go ahead Sevim",
+        "dateCreated": "2025-01-20T08:31:40+01:00",
+        "dateInit": null,
+        "dateDelivered": null,
+        "dateApproved": null
     }
 ]
