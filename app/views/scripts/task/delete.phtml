@@ -1,0 +1,41 @@
+<?php
+$title = $this->title;
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+    <body>
+        <?php
+        $task = $this->selected_task;
+        ?>
+
+        <!-- Display the Message -->
+        <?php if (isset($this->message)): ?>
+            <div class="rajdhani-light" style="margin-bottom: 10px; margin-left: 15px;">
+                <?= $this->message; ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($task) && isset($task['id_task'], $task['task_description'])): ?>
+
+            <form action="<?php echo WEB_ROOT; ?>/task/delete" method="POST">
+                <!-- Delete Confirmation -->
+                <div class="rajdhani-light" style="margin-bottom: 5px; display: flex; flex-direction: column; align-items: flex-start;">
+                    <p><b><?= htmlspecialchars("TASK ID:" . $task['id_task']); ?></b> - <?= htmlspecialchars($task['task_description']); ?></p>
+                    <label for="confirmation" class="rajdhani-light">CONFIRM DELETE:</label>
+                    <input type="text" id="confirmation" name="confirmation" placeholder="Type 'delete'" required>
+                </div>
+
+                <!-- Hidden ID Field -->
+                <input type="hidden" name="id_task" value="<?= htmlspecialchars($task['id_task'] ?? ''); ?>">
+
+                <!-- Submit Button -->
+                <div class="rajdhani-light" style="margin-bottom: 5px;">
+                    <button type="submit" class="rajdhani-light" style="align-self: flex-start; padding: 10px 20px; margin: 0px 0px 20px 0px;">DELETE TASK</button>
+                </div>
+            </form>
+
+        <?php endif; ?>
+
+    </body>
+</html>

@@ -57,13 +57,12 @@ class TaskController extends Controller {
 
     public function getTaskById(int $id_task) {
         $tasks = $this->loadData($this->taskFilePath);
-        $task = null;
         foreach ($tasks as $task) {
             if ($task['id_task'] === $id_task) {
                 return $task;
             }
         }
-        return $task;  // Task not found : empty array
+        return null;  // Task not found : empty array
     }
 
     public function showAction() {
@@ -203,33 +202,79 @@ class TaskController extends Controller {
     
         return $task;
     }
+    */
+
+    public function deleteAction() {
+        $task = null;
+        $message = "";
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $taskId = (int)($_POST['id_task'] ?? 0);
+            // Check if confirmation exists
+            if (!empty($_POST['confirmation'])) {
+                $confirmation = strtolower(trim($_POST['confirmation']));
+    
+                // Process deletion only if confirmation matches
+                if ($confirmation === 'delete') {
+                    $tasks = $this->loadData($this->taskFilePath);
+                    // Delete selected task and reindex the array
+                    $tasksAfterDeletion = array_values(array_filter($tasks, fn($task) => $task['id_task'] !== $taskId));
+                    $success = $this->saveData($tasksAfterDeletion, $this->taskFilePath);
+    
+                    if ($success) {
+                        $message = '<p class="rajdhani-light" style="color: green; margin-left: 10px;">Task deleted successfully!</p>';
+                    } else {
+                        $message = '<p class="rajdhani-light" style="color: red; margin-left: 10px;">Task deletion failed!</p>';
+                    }
+                    $this->view->selected_task = null;
+                }
+            }
+    
+            // Retrieve the task for confirmation in the delete view
+            $task = $this->getTaskById($taskId);
+        }
+    
+        // Always render the delete form
+        $this->view->title = 'CRUD Task Delete';
+        $this->view->message = $message;
+        $this->view->selected_task = $task ?? [];
+    }
     
 
+    /*
     public function deleteAction() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['id_task'])) {
                 $taskId = (int)$_POST['id_task'];
                 $confirmation = strtolower(trim($_POST['confirmation'] ?? ''));
-    
+                var_dump($confirmation);
                 // Process only if confirmation is provided
                 if ($confirmation === 'delete') {
-                    $taskManager = TaskManager::getInstance();
-                    $success = $taskManager->deleteTask($taskId);
+                    $task = $this->getTaskById($taskId);
+
+                    var_dump($task); // Verify if the task is found
+                    exit;
+                    //$this->view->selected_task = $task;
+
+                    $tasks = $this->loadData($this->taskFilePath);
+                    $tasksAfterDeletion = array_filter($tasks, fn($task) => $task['id_task'] !== $taskId);
+                    $success = $this->saveData($tasksAfterDeletion, $this->taskFilePath);
     
                     if ($success) {
                         echo '<p class="rajdhani-light" style="color: green; margin-left: 10px;">Task deleted successfully!</p>';
                     } else {
-                        echo '<p class="rajdhani-light" style="color: red; margin-left: 10px;">Task was deleted already.</p>';
+                        echo '<p class="rajdhani-light" style="color: red; margin-left: 10px;">Task had already been deleted.</p>';
                     }
                 } elseif (!empty($confirmation)) {
                     echo '<p class="rajdhani-light" style="color: red; margin-left: 10px;">Confirmation failed. Task not deleted.</p>';
                 }
             }
         }
-    
         // Always render the delete form
-        $this->view->render('crudtask/delete.php');
+        $this->view->title = 'CRUD Task Delete';
+        $this->view->selected_task = $task;
+        //$this->view->render('crudtask/delete.php');
     }
-    */
+        */
 }
 ?>
