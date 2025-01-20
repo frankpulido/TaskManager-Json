@@ -1,0 +1,86 @@
+<?php
+// Fetch request data used by head
+$title = $this->title;
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <?php
+    // Fetch request data for the forms
+    $tasks = $this->tasks;
+    // Get first task given that it will be the default option of the dropdown menu
+    $task = ($this->selected_task) ?? $tasks[0];
+    ?>
+        <h2 class="rajdhani-light" style="margin-left: 15px;">SEARCH->UPDATE/DELETE TASK</h2>
+
+        <form action="<?php echo WEB_ROOT; ?>/task/show" method="POST">
+            <div style="margin: 0px 0px 5px 15 px;">
+                <label for="id_task" class="rajdhani-light">Choose a task:</label>
+                <select name="id_task" id="id_task" class="rajdhani-light">
+
+                    <?php foreach ($tasks as $item): ?>
+                        <option value="<?= $item['id_task']; ?>" <?= $task['id_task'] == $item['id_task'] ? 'selected' : '' ?>>
+                            <?= $item['id_task'] . ' - ' . htmlspecialchars($item['task_description']); ?>
+                        </option>
+                    <?php endforeach; ?>
+
+                </select>
+                <!--<button type="submit" class="rajdhani-light" style="padding: 8px 20px; margin: 0px 0px 0px 15px">VIEW TASK</button>-->
+            </div>
+            <button type="submit" class="rajdhani-light" style="align-self: flex-start; padding: 10px 20px; margin: 0px 0px 25px 15px;">VIEW TASK</button>
+        </form>
+
+        <div class="rajdhani-light" style="margin-left: 10px;">
+
+            <?php
+            if ($task) {
+                //$task = $selected_task;
+
+                echo '<article class="grid-item">';
+                    echo "<p><b>TASK ID</b>  : <b>" . htmlspecialchars($task['id_task']) . "</b> | Project ID : " . htmlspecialchars($task['project_id']) . " | Programmer ID : " . htmlspecialchars($task['programmer_id']) . "</p>";
+                    echo "<p><b>" . htmlspecialchars($task['task_kind']) . "</b> | Description : " . htmlspecialchars($task['task_description']) . "</p>";
+                    echo "<p>Task progress : " . htmlspecialchars($task['task_status']) . "</p>";
+                    
+                    if (!empty($task['dateCreated'])) {
+                        echo "<p>Pipelined : " . htmlspecialchars($task['dateCreated']) . "</p>";
+                    }
+                    if (!empty($task['dateInit'])) {
+                        echo "<p>Started : " . htmlspecialchars($task['dateInit']) . "</p>";
+                    }
+                    if (!empty($task['dateDelivered'])) {
+                        echo "<p>Delivered : " . htmlspecialchars($task['dateDelivered']) . "</p>";
+                    }
+                    if (!empty($task['dateApproved'])) {
+                        echo "<p>Released : " . htmlspecialchars($task['dateApproved']) . "</p>";
+                    }
+                echo '</article>';
+
+                };
+            ?>
+        </div>
+
+        <div class="rajdhani-light" style="display: flex; align-items: flex-start; padding: 0px 10px 20px 15px;">
+            <!-- UPDATE FORM -->
+            <form action="<?php echo WEB_ROOT; ?>/task/update" method="post">
+                <input type="hidden" name="id_task" value="<?= htmlspecialchars($task['id_task']); ?>">
+                <button type="submit" class="rajdhani-light" style="padding: 10px 20px; margin: 0px 10px 20px 0px;">UPDATE TASK</button>
+            </form>
+            <!-- DELETE FORM -->
+            <form action="<?php echo WEB_ROOT; ?>/task/delete" method="post">
+                <input type="hidden" name="id_task" value="<?= htmlspecialchars($task['id_task']); ?>">
+                <button type="submit" class="rajdhani-light" style="padding: 10px 20px; margin: 0px 10px 20px 0px;">DELETE TASK</button>
+            </form>
+        </div>
+
+        <!--
+        <div class="rajdhani-light" style="margin-bottom: 5px;">
+            <p>Task ID: <?//= $task['id_task']; ?></p>
+            <p>Description: <?//= $task['task_description']; ?></p>
+            <button onclick="location.href='/crud_task/update/<?//= $taskManager->getTaskById($taskId); ?>'">Update</button>
+            <button onclick="location.href='/crud_task/delete/<?//= $taskManager->getTaskById($taskId) ?>'">Delete</button>
+        </div>
+        -->
+</body>
+</html>

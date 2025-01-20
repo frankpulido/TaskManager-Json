@@ -178,12 +178,14 @@ final class Task {
     // This method below (getTaskById) won't probably be used... Handled directly from Controller showAction()
     public function getTaskById(int $id_task) : array {
         $tasks = $this->getAllTasks();
+        $task = null;
         foreach ($tasks as $task) {
             if ($task['id_task'] === $id_task) {
                 return $task;
+                break;
             }
         }
-        return [];  // Task not found : empty array
+        return $task;  // Task not found : empty array
     }
 
     // UPDATE : Task 'project_id' and 'task_kind' cannot be updated (proceed to delete and create a new task).

@@ -36,7 +36,7 @@ class TaskController extends Controller {
 
         $projects = $this->loadData($this->projectFilePath);
         $programmers = $this->loadData($this->programmerFilePath);
-        $this->view->title = "CRUD Task";
+        $this->view->title = "CRUD Task Create";
         $this->view->projects = $projects;
         $this->view->programmers = $programmers;
     }
@@ -55,6 +55,42 @@ class TaskController extends Controller {
         //$_SESSION['all_tasks'] = $tasks;
     }
 
+    public function getTaskById(int $id_task) {
+        $tasks = $this->loadData($this->taskFilePath);
+        $task = null;
+        foreach ($tasks as $task) {
+            if ($task['id_task'] === $id_task) {
+                return $task;
+            }
+        }
+        return $task;  // Task not found : empty array
+    }
+
+    public function showAction() {
+
+        $tasks = $this->loadData($this->taskFilePath);
+        //$selected_task = [];
+        $selected_task = null;
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_task'])) {
+            
+            $id_task = (int) $_POST['id_task'];
+            $tasks = $this->loadData($this->taskFilePath);
+
+            foreach ($tasks as $task) {
+                if ($task['id_task'] === $id_task) {
+                    $selected_task = $task;
+                }
+            }
+        }
+        // Render the show task view
+        $this->view->title = 'CRUD Task Show';
+        $this->view->selected_task = $selected_task;
+        $this->view->tasks = $tasks;
+        //$this->view->render('crudtask/show.php');
+    }
+
+    /*
     public function showAction() {
 
         $selected_task = [];
@@ -76,6 +112,7 @@ class TaskController extends Controller {
         $this->view->selected_task = $selected_task;
         //$this->view->render('crudtask/show.php');
     }
+    */
     
     /*
     public function updateAction() {
@@ -165,7 +202,8 @@ class TaskController extends Controller {
         }
     
         return $task;
-    }    
+    }
+    
 
     public function deleteAction() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
