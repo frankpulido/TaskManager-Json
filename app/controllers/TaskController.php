@@ -8,52 +8,50 @@ class TaskController extends Controller {
     protected string $projectFilePath = ROOT_PATH . '/app/models/data/projects.json';
 
     public function createAction() {
+        $error = null;
 
         // Ensure that the form data has been submitted
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            //var_dump($_POST);
+            $taskKind = $_POST['task_kind'];
             $taskDescription = $_POST['task_description'] ?? null;
+            $programmerSkills = $this->getProgrammerSkillsById($_POST['programmer_id']);
             if ($taskDescription === null || trim($taskDescription) === '') {
-                $this->view->error = "Task description is required.";
-                return;
+                $error = "Task description is required.";
             }
-            // Collect the data from the form
-            $task = new Task($_POST['project_id'], $_POST['programmer_id'], $_POST['task_kind'], $_POST['task_description']??'');
-            $created_task = $task->storeCreatedTask();
-            $this->view->created_task = $created_task;
-            //$_SESSION['created_task'] = $task->storeCreatedTask();
-            // Store the created task in a session (or pass it via query string)
-            /*
-            $_SESSION['created_task'] = [
-                'id_task' => $task->getIdTask(),
-                'project_id' => $task->getProjectId(),
-                'programmer_id' => $task->getProgrammerId(),
-                'task_kind' => $task->getTaskKind(),
-                'task_status' => $task->getTaskStatus(),
-                'task_description' => $task->getTaskDescription(),
-            ];
-            */
+            if (empty($programmerSkills) || !in_array($taskKind, $programmerSkills)) {
+                $error = "The selected developer doesn't have the required skills to undertake the Task";
+            }
+
+            if(!isset($error)) {
+                // Collect the data from the form
+                $task = new Task($_POST['project_id'], $_POST['programmer_id'], $_POST['task_kind'], $_POST['task_description'] ?? '');
+                $created_task = $this->storeCreatedTask($task);
+                $this->view->created_task = $created_task;
+            }
         }
 
+        if ($error) {$this->view->error = $error;}
         $projects = $this->loadData($this->projectFilePath);
         $programmers = $this->loadData($this->programmerFilePath);
+        //$kinds = Task::const ALLOWED_KINDS;
         $this->view->title = "CRUD Task Create";
         $this->view->projects = $projects;
+        //$this->view->kinds = $kinds;
         $this->view->programmers = $programmers;
     }
 
 
-    public function getAllAction(){
-        /*
-        if (ob_get_level()) {
-            ob_end_flush();
-        }
-        $taskManager = TaskManager::getInstance();
-        $tasks = $taskManager->getAllTasks();
-        */
-        $tasks = $this->loadData($this->taskFilePath);
-        // Store the created task in a session (or pass it via query string)
-        //$_SESSION['all_tasks'] = $tasks;
+    // HELPERS
+
+    public function storeCreatedTask(Task $task) : array { // This funtion is to CREATE in json file
+        $taskData = $task->toArray();
+        $allTasks = $this->loadData($this->taskFilePath);
+        $allTasks[] = $taskData;
+        $this->saveData($allTasks, $this->taskFilePath);
+        return $taskData;
     }
+
 
     public function getTaskById(int $id_task) {
         $tasks = $this->loadData($this->taskFilePath);
@@ -62,7 +60,32 @@ class TaskController extends Controller {
                 return $task;
             }
         }
-        return null;  // Task not found : empty array
+        return null;  // Task not found
+    }
+
+    public function getProjectById(int $id_project) : array {
+        $projects = $this->loadData($this->projectFilePath);
+        foreach($projects as $project) {
+            if($project['id_project'] === $id_project) {
+                return $project;
+            }
+        }
+        return null; // Project not found
+    }
+
+    public function getProgrammerById(int $programmer_id) {
+        $programmers = $this->loadData($this->programmerFilePath);
+        foreach ($programmers as $programmer) {
+            if ($programmer['id_programmer'] === $programmer_id) {
+                return $programmer;
+            }
+        }
+        return null; // Programmer not found
+    }
+
+    public function getProgrammerSkillsById(int $programmer_id) : array {
+        $programmer = $this->getProgrammerById($programmer_id);
+        return $programmer['skills'] ?? [];
     }
 
     public function showAction() {
@@ -88,30 +111,6 @@ class TaskController extends Controller {
         $this->view->tasks = $tasks;
         //$this->view->render('crudtask/show.php');
     }
-
-    /*
-    public function showAction() {
-
-        $selected_task = [];
-        //$selected_task = null;
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_task'])) {
-            
-            $id_task = (int) $_POST['id_task'];
-            $tasks = $this->loadData($this->taskFilePath);
-            foreach ($tasks as $task) {
-                if ($task['id_task'] === $id_task) {
-                    $selected_task = $task;
-                    break;
-                }
-                //$_SESSION['selected_task'] = null; // Handle case if task not found
-            }
-        }
-        // Render the show task view
-        $this->view->selected_task = $selected_task;
-        //$this->view->render('crudtask/show.php');
-    }
-    */
     
     /*
     public function updateAction() {
@@ -239,42 +238,5 @@ class TaskController extends Controller {
         $this->view->message = $message;
         $this->view->selected_task = $task ?? [];
     }
-    
-
-    /*
-    public function deleteAction() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (isset($_POST['id_task'])) {
-                $taskId = (int)$_POST['id_task'];
-                $confirmation = strtolower(trim($_POST['confirmation'] ?? ''));
-                var_dump($confirmation);
-                // Process only if confirmation is provided
-                if ($confirmation === 'delete') {
-                    $task = $this->getTaskById($taskId);
-
-                    var_dump($task); // Verify if the task is found
-                    exit;
-                    //$this->view->selected_task = $task;
-
-                    $tasks = $this->loadData($this->taskFilePath);
-                    $tasksAfterDeletion = array_filter($tasks, fn($task) => $task['id_task'] !== $taskId);
-                    $success = $this->saveData($tasksAfterDeletion, $this->taskFilePath);
-    
-                    if ($success) {
-                        echo '<p class="rajdhani-light" style="color: green; margin-left: 10px;">Task deleted successfully!</p>';
-                    } else {
-                        echo '<p class="rajdhani-light" style="color: red; margin-left: 10px;">Task had already been deleted.</p>';
-                    }
-                } elseif (!empty($confirmation)) {
-                    echo '<p class="rajdhani-light" style="color: red; margin-left: 10px;">Confirmation failed. Task not deleted.</p>';
-                }
-            }
-        }
-        // Always render the delete form
-        $this->view->title = 'CRUD Task Delete';
-        $this->view->selected_task = $task;
-        //$this->view->render('crudtask/delete.php');
-    }
-        */
 }
 ?>

@@ -23,14 +23,14 @@ final class Task {
         $this->id_task = $this->generateUniqueId();
         $this->project_id = $project_id;
         $this->programmer_id = $programmer_id;
-        $this->task_kind = (string) $this->setTaskKind($task_kind); // Validation
+        $this->setTaskKind($task_kind); // Validation
         $this->task_status = "PIPELINED"; // No longer an enum
         $this->task_description = $task_description;
         $this->dateCreated = new DateTimeImmutable();
     }
 
     private function generateUniqueId() : int {
-        $tasks = $this->getAllTasks();
+        $tasks = $this->loadData(Task::$filePath);
         if (!empty($tasks)) {
             $ids = array_map(fn($item) => (int)$item['id_task'], $tasks);
             return max($ids) + 1;
@@ -142,51 +142,6 @@ final class Task {
 
     // ************************ CRUD ************************
 
-    // CREATE
-
-    public function storeCreatedTask() : array { // This funtion is to CREATE in json file
-        $taskData = $this->toArray();
-        $allTasks = $this->getAllTasks();
-        $allTasks[] = $taskData;
-        $this->saveData($allTasks, self::$filePath);
-        return $taskData;
-    }
-
-    /*
-    public function createTask(array $taskData) : array {
-        $task = new Task(
-            (int) $taskData['project_id'],
-            (int) $taskData['programmer_id'],
-            $taskData['task_kind'],
-            $taskData['task_description'] ?? '',
-        );
-        $task = $task->toArray();
-        $allTasks = $this->getAllTasks();
-        $allTasks[] = $task;
-        $this->saveData($allTasks, self::$filePath);
-        return $task;
-    }
-    */
-
-    // READ
-
-    public function getAllTasks() : array {
-        $allTasks = $this->loadData(self::$filePath);
-        return $allTasks;
-    }
-
-    // This method below (getTaskById) won't probably be used... Handled directly from Controller showAction()
-    public function getTaskById(int $id_task) : array {
-        $tasks = $this->getAllTasks();
-        $task = null;
-        foreach ($tasks as $task) {
-            if ($task['id_task'] === $id_task) {
-                return $task;
-                break;
-            }
-        }
-        return $task;  // Task not found : empty array
-    }
 
     // UPDATE : Task 'project_id' and 'task_kind' cannot be updated (proceed to delete and create a new task).
 
@@ -197,7 +152,7 @@ final class Task {
         if($this->task_status == 'INIT') { $this->setDateDelivered($date); return "Task status updated to DELIVERED"; }
         if($this->task_status == 'PIPELINED') { $this->setDateInit($date); return "Task status updated to INIT"; }
     }
-
+/*
     public function updateTask(int $id_task, array $updatedData) : string {
         $allTasks = $this->getAllTasks();
         foreach($allTasks as $task) {
@@ -210,17 +165,6 @@ final class Task {
         }
         return "Task with ID : $id_task wasn't found in database";
     }
-
-    public function deleteTask(int $id_task) : string {
-        $existingTask = $this->getTaskById($id_task);
-        if (!$existingTask) {
-            return "Task with ID : $id_task wasn't found in database";
-        }
-        $tasks = $this->getAllTasks();
-        $tasksAfterDeletion = array_filter($tasks, fn($task) => $task['id_task'] !== $id_task);
-    
-        $this->saveData($tasksAfterDeletion, self::$filePath);
-        return "Task with ID : $id_task has been deleted from database";
-    }
+    */
 }
 ?>
