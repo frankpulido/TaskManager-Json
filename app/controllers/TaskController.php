@@ -20,18 +20,6 @@ class TaskController extends Controller {
             $task = new Task($_POST['project_id'], $_POST['programmer_id'], $_POST['task_kind'], $_POST['task_description']??'');
             $created_task = $task->storeCreatedTask();
             $this->view->created_task = $created_task;
-            //$_SESSION['created_task'] = $task->storeCreatedTask();
-            // Store the created task in a session (or pass it via query string)
-            /*
-            $_SESSION['created_task'] = [
-                'id_task' => $task->getIdTask(),
-                'project_id' => $task->getProjectId(),
-                'programmer_id' => $task->getProgrammerId(),
-                'task_kind' => $task->getTaskKind(),
-                'task_status' => $task->getTaskStatus(),
-                'task_description' => $task->getTaskDescription(),
-            ];
-            */
         }
 
         $projects = $this->loadData($this->projectFilePath);
