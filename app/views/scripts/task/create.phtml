@@ -70,21 +70,23 @@ $kinds = ['FRONTOFFICE', 'BACKOFFICE', 'DATABASE'];
 
 <!-- Display the created task if available -->
 
-<?php if (isset($this->error)): ?>
+
+<?php if ($this->error): ?>
     <p class="rajdhani-light" style="color: red;"><?= htmlspecialchars($this->error) ?></p>
 <?php endif; ?>
 
-<?php
-if ($this->created_task) {
-    $createdTask = $this->created_task;
-    echo '<article class="grid-item rajdhani-light">';
-    echo '<p class="rajdhani-light" style="color: green;">Your new task has been successfully created!</p>';
-    echo "<p><b>TASK ID</b>  : <b>" . htmlspecialchars($createdTask['id_task']) . "</b> | Project ID : " . htmlspecialchars($createdTask['project_id']) . " | Programmer ID : " . htmlspecialchars($createdTask['programmer_id']) . "</p>";
-    echo "<p><b>" . htmlspecialchars($createdTask['task_kind']) . "</b> | Task Description : " . htmlspecialchars($createdTask['task_description']) . "</p>";
-    echo "<p>Task progress : " . htmlspecialchars($createdTask['task_status']) . "</p>";
-    echo '</article>';
-}
-?>
+<?php if ($this->created_task): ?>
+    
+    <article class="grid-item rajdhani-light">
+        <?php $createdTask = $this->created_task;?>
+        <p class="rajdhani-light" style="color: green;">Your new task has been successfully created!</p>
+        <p><b>TASK ID  : <?= htmlspecialchars($createdTask['id_task']); ?> | Project ID : <?= htmlspecialchars($createdTask['project_id']); ?> | Programmer ID : <?= htmlspecialchars($createdTask['programmer_id']); ?></b></p>
+        <p><b><?= htmlspecialchars($createdTask['task_kind']); ?> | Task Description : <?= htmlspecialchars($createdTask['task_description']); ?></b></p>
+        <p><b>Task progress : <?= htmlspecialchars($createdTask['task_status']); ?></b></p>
+    </article>
+
+<?php endif ?>
+
 
 </body>
 </html>

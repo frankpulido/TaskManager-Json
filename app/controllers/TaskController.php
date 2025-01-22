@@ -226,6 +226,8 @@ class TaskController extends Controller {
                         $message = '<p class="rajdhani-light" style="color: red; margin-left: 10px;">Task deletion failed!</p>';
                     }
                     $this->view->selected_task = null;
+                } else {
+                    $message = '<p class="rajdhani-light" style="color: red; margin-left: 10px;">Task deletion failed! Please confirm typing "DELETE".</p>';
                 }
             }
     
