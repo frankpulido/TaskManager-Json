@@ -1,0 +1,71 @@
+<?php
+$title = $this->title;
+$task = ($this->selected_task) ?? null;
+$programmers = ($this->programmers) ?? null;
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <?php
+    //$task = ($this->selected_task) ?? null;
+    //$programmers = ($this->programmers) ?? null;
+    if($this->selected_task) {
+        $assignedProgrammerName = '';
+        foreach ($programmers as $programmer) {
+            if ($programmer['id_programmer'] == $task['programmer_id']) {
+                $assignedProgrammerName = $programmer['programmer_name'];
+                break;
+            }
+        }
+    }
+    ?>
+    <h2 class="rajdhani-light" style="margin-left: 15px;">UPDATE TASK</h2>
+
+    <?php if ($this->error): ?>
+    <p class="rajdhani-light" style="color: red;"><?= htmlspecialchars($this->error) ?></p>
+    <?php endif; ?>
+
+    <div class="rajdhani-light" style="margin: 10px;">
+        <!-- Display Task Fields -->
+        <p><b>Task ID:</b> <?= htmlspecialchars($task['id_task']); ?></p>
+        <p><b>Task Description:</b> <?= htmlspecialchars($task['task_description']); ?></p>
+        <p><b>Task Kind:</b> <?= htmlspecialchars($task['task_kind']); ?></p>
+        <p><b>Assigned Programmer:</b> <?= htmlspecialchars("ID : " . $task['programmer_id'] . " | $assignedProgrammerName"); ?></p>
+        <p><b>Current Status:</b> <?= htmlspecialchars($task['task_status']); ?></p>
+    </div>
+
+    <!-- Update Programmer Form : I DO NOT WANT TO CHANGE PROJECT OR DESCRIPTION, IT MAKES NO SENSE-->
+    <form action="<?php echo WEB_ROOT; ?>/task/update" method="POST">
+        <div class="rajdhani-light" style="margin-bottom: 10px;">
+            <label for="assigned_programmer" class="rajdhani-light">Reassign Programmer:</label>
+            <select id="assigned_programmer" name="assigned_programmer" class="rajdhani-light" required>
+                <?php foreach ($programmers as $programmer): ?>
+                    <option value="<?= $programmer['id_programmer']; ?>" <?= $programmer['id_programmer'] == $task['programmer_id'] ? 'selected' : ''; ?>>
+                        <?= htmlspecialchars($programmer['programmer_name']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <input type="hidden" name="id_task" value="<?= htmlspecialchars($task['id_task']); ?>">
+
+        <div class="rajdhani-light" style="margin-bottom: 0px;">
+            <button type="submit" class="rajdhani-light" style="padding: 10px 20px;">SAVE CHANGES</button>
+        </div>
+    </form>
+
+    <!-- Advance Progress Form -->
+    <section style="margin-bottom: 5px;">
+        <form action="<?php echo WEB_ROOT; ?>/task/advance" method="POST">
+            <input type="hidden" name="id_task" value="<?= htmlspecialchars($task['id_task']); ?>">
+
+            <div class="rajdhani-light" style="margin-bottom: 0px;">
+                <button type="submit" name="advance_status" value="true" class="rajdhani-light" style="padding: 10px 20px;">UPGRADE PROGRESS</button>
+            </div>
+        </form>
+    </section>
+
+</body>
+</html>

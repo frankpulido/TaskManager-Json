@@ -122,11 +122,11 @@
     {
         "id_task": 111,
         "project_id": 1,
-        "programmer_id": 1,
+        "programmer_id": "3",
         "task_kind": "FRONTOFFICE",
         "task_status": "PIPELINED",
-        "task_description": "This should work 111 again...",
-        "dateCreated": "2025-01-22T17:20:48+01:00",
+        "task_description": "New Task for Jeffrey",
+        "dateCreated": "2025-01-22T21:10:00+01:00",
         "dateInit": null,
         "dateDelivered": null,
         "dateApproved": null
