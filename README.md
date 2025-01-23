@@ -1,3 +1,55 @@
+# GIT HISTORY RETRIEVAL
+
+Sequence to retrieve and graph ALL commit history from all branches, including those deleted locally (git) and/or remotely (GitHub):
+
+1. Fetch all branches and prune deleted remote branches:
+git fetch --all --prune
+2. View all branches, including remote ones:
+git branch -a
+3. Check the reflog for all recent actions, including work on deleted branches:
+git reflog
+4. Graph all commits, including those from deleted branches:
+git log --graph --oneline --decorate $(git rev-list --all --parents --color)
+5. For a more detailed view with author information:
+git log --graph --pretty=format:'%C(auto)%h%d %s %C(blue)<%an>' --all
+6. To see merge commits, which may include names of deleted branches:
+git log --merges
+
+This sequence should provide a comprehensive view of the repository's history, including deleted branches. If you need to restore a deleted branch, you can use the SHA1 from the reflog output.
+For GitHub-specific actions:
+7. On GitHub, go to the repository's "Activity" tab, select "Branch deletions", and use the restore option if available.
+
+Remember, while these steps will show most of the history, some information about deleted branches may eventually be lost if they're not merged and are removed from the reflog.
+
+
+-----------
+READ, DECIDE AND MERGE ABOVE :
+To see the work through branches with decorations in Git :
+git log --graph --oneline --decorate --all
+
+For a more detailed view, you can use:
+git log --graph --pretty=format:'%C(auto)%h%d %s %C(blue)<%an>' --all
+This command customizes the output to include commit hashes, decorations, commit messages, and author names with color coding.
+
+If you're not seeing all feature branches, it might be because:
+    Some branches are not fetched from the remote repository.
+    Some branches have been deleted locally or remotely.
+    The branches exist but haven't diverged from the main branch.
+Steps :
+git fetch --all
+git branch -a
+git log --graph --oneline --decorate --all --simplify-by-decoration
+
+If you're not seeing the log of all feature branches you've worked with,
+it's because Git's log doesn't show deleted branches by default.
+Steps :
+git reflog
+git log --walk-reflogs --all
+git log --graph --oneline --decorate $(git rev-list --all --parents --color)
+These commands will show you the history of your work, including on branches that have been deleted after merging.
+
+
+
 # PHP initial Project
 Main structure of php project. Folders / files:
 - **app**
