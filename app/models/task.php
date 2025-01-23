@@ -124,6 +124,9 @@ final class Task {
         $this->task_status = "RELEASED"; // Triggers an status change
     }
 
+
+    // METHODS - Serialize to save in Json Persistence file
+
     public function toArray(): array {
         return [
             'id_task' => $this->id_task,
@@ -139,11 +142,7 @@ final class Task {
         ];
     }
 
-
-    // ************************ CRUD ************************
-
-
-    // UPDATE : Task 'project_id' and 'task_kind' cannot be updated (proceed to delete and create a new task).
+    // METHODS - Upgrade to next stage, not in use at the moment, handled by the TaskController upgradeProgress() method
 
     public function updateTaskStatus() : string {
         $date = new DateTime();
@@ -152,19 +151,5 @@ final class Task {
         if($this->task_status == 'INIT') { $this->setDateDelivered($date); return "Task status updated to DELIVERED"; }
         if($this->task_status == 'PIPELINED') { $this->setDateInit($date); return "Task status updated to INIT"; }
     }
-/*
-    public function updateTask(int $id_task, array $updatedData) : string {
-        $allTasks = $this->getAllTasks();
-        foreach($allTasks as $task) {
-            if($task['id_task'] == $id_task){
-                if(isset($updatedData['programmer_id'])) {$task['programmer_id'] = $updatedData['programmer_id'];}
-                if(isset($updatedData['task_description'])) {$task['task_description'] = $updatedData['task_description'];}
-                $this->saveData($allTasks, self::$filePath);
-                return "Task programmer and/or description successfully updated for Task ID : $id_task";
-            }
-        }
-        return "Task with ID : $id_task wasn't found in database";
-    }
-    */
 }
 ?>

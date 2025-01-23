@@ -34,10 +34,8 @@ class TaskController extends Controller {
         if ($error) {$this->view->error = $error;}
         $projects = $this->loadData($this->projectFilePath);
         $programmers = $this->loadData($this->programmerFilePath);
-        //$kinds = Task::const ALLOWED_KINDS;
         $this->view->title = "CRUD Task Create";
         $this->view->projects = $projects;
-        //$this->view->kinds = $kinds;
         $this->view->programmers = $programmers;
     }
 
@@ -45,7 +43,6 @@ class TaskController extends Controller {
     public function showAction() {
 
         $tasks = $this->loadData($this->taskFilePath);
-        //$selected_task = [];
         $selected_task = null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_task'])) {
@@ -63,11 +60,14 @@ class TaskController extends Controller {
         $this->view->title = 'CRUD Task Show';
         $this->view->selected_task = $selected_task;
         $this->view->tasks = $tasks;
-        //$this->view->render('crudtask/show.php');
     }
 
     public function updateAction() {
+        var_dump($_POST);
         $error = null;
+        $message = null;
+        $tasks = $this->loadData($this->taskFilePath);
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['id_task'])) {
                 $id_task = (int)$_POST['id_task'];
@@ -84,19 +84,15 @@ class TaskController extends Controller {
                     }
                     else {
                         $updatedData = [
-                            'programmer_id' => $_POST['assigned_programmer']
+                            'programmer_id' => (int) $_POST['assigned_programmer']
                         ];
-        
-                        $tasks = $this->loadData($this->taskFilePath);
-                        //$message = "Task with ID : $id_task wasn't found in database";
-        
+                
                         foreach($tasks as &$task) {
+
                             if($task['id_task'] == $id_task) {
                                 $task['programmer_id'] = $updatedData['programmer_id'];
-                                if(isset($_POST['advance_status'])) {
-                                    $task->updateTaskStatus();
-                                }
-                                $message = "Task updated successfully!";
+                                $message = "Task developer updated successfully!";
+                                //var_dump($_POST);
                                 break;
                             }
                         }
@@ -104,84 +100,35 @@ class TaskController extends Controller {
                     
                     if(!isset($error)) {
                         $this->saveData($tasks, $this->taskFilePath);
-                        $this->view->selected_task = $this->getTaskById($id_task);
-                        $this->view->message = $message;
+                        $task = $this->getTaskById($id_task); // I have to pass the updated/upgraded task
                     }
+                }
+
+                if(isset($_POST['advance_status'])) {
+                    //var_dump($_POST);
+                    $upgradedTask = $this->upgradeProgress($task)->toArray();
+                    foreach($tasks as &$task) {
+                        if($task['id_task'] == $upgradedTask['id_task']) {
+                            $task['task_status'] = $upgradedTask['task_status'];
+                            $task['dateInit'] = $upgradedTask['dateInit'];
+                            $task['dateDelivered'] = $upgradedTask['dateDelivered'];
+                            $task['dateApproved'] = $upgradedTask['dateApproved'];
+                            break;
+                        }
+                    }
+                    $this->saveData($tasks, $this->taskFilePath);
+                    $task = $this->getTaskById($id_task); // I have to pass the updated/upgraded task
+                    $message = "Task status successfully upgraded";
                 }
             }
         }
         if ($error) {$this->view->error = $error;}
+        if ($message) {$this->view->message = $message;}
+        $this->view->selected_task = $task;
         $this->view->title = 'CRUD Task Update';
         $this->view->programmers = $this->loadData($this->programmerFilePath);
     }
     
-
-    public function upgradeProgressAction() {
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_task'])) {
-            $taskId = (int)$_POST['id_task'];
-    
-            $taskArray = $this->getTaskById($taskId); // Retrieves task as an array
-            $task = $this->convertArrayToTask($taskArray);
-            $message = $task->updateTaskStatus();
-            /*
-            $now = new DateTime();
-    
-            // Use Task methods to progress status
-            switch ($task->getTaskStatus()) {
-                case TaskStatus::RELEASED:
-                    $message = '<p class="rajdhani-light" style="color: green; margin-left: 10px;">Task progress cannot be advanced, it has already been RELEASED!</p>';
-                    break; // Final stage
-                case TaskStatus::DELIVERED:
-                    $task->setDateApproved($now);
-                    $message = '<p class="rajdhani-light" style="color: green; margin-left: 10px;">Task progress advanced successfully to RELEASED!</p>';
-                    break;
-                case TaskStatus::INIT:
-                    $task->setDateDelivered($now);
-                    $message = '<p class="rajdhani-light" style="color: green; margin-left: 10px;">Task progress advanced successfully to DELIVERED!</p>';
-                    break;
-                case TaskStatus::PIPELINED:
-                    $task->setDateInit($now);
-                    $message = '<p class="rajdhani-light" style="color: green; margin-left: 10px;">Task progress advanced successfully to INITIATED!</p>';
-                    break;
-            }
-            */
-    
-            // Save the updated task
-            //$taskManager->updateTask($taskId, $task->toArray());
-    
-            // Update session with the modified task
-            //$_SESSION['selected_task'] = $task->toArray();
-    
-        }
-        $this->view->title = 'Task Status Upgrade';
-        $this->view->selected_task = $task->toArray();
-        $this->view->message = $message;
-    }
-    
-
-    // Helper for upgradeProgressAction
-    public function convertArrayToTask(array $taskArray): Task {
-        $task = new Task(
-            (int)$taskArray['project_id'],
-            (int)$taskArray['programmer_id'],
-            $taskArray['task_kind'],
-            $taskArray['task_description']
-        );
-        $task->setIdTask($taskArray['id_task']);
-    
-        if (!empty($taskArray['dateInit'])) {
-            $task->setDateInit(new DateTime($taskArray['dateInit']));
-        }
-        if (!empty($taskArray['dateDelivered'])) {
-            $task->setDateDelivered(new DateTime($taskArray['dateDelivered']));
-        }
-        if (!empty($taskArray['dateApproved'])) {
-            $task->setDateApproved(new DateTime($taskArray['dateApproved']));
-        }
-        return $task;
-    }
-
 
     public function deleteAction() {
         $task = null;
@@ -223,6 +170,36 @@ class TaskController extends Controller {
 
 
     // HELPERS
+
+    public function upgradeProgress(array $task): Task {
+        $task = $this->convertArrayToTask($task);
+        $task->updateTaskStatus();
+        return $task;
+    }
+    
+
+    // Helper for upgradeProgress
+    public function convertArrayToTask(array $taskArray): Task {
+        $task = new Task(
+            (int)$taskArray['project_id'],
+            (int)$taskArray['programmer_id'],
+            $taskArray['task_kind'],
+            $taskArray['task_description']
+        );
+        $task->setIdTask($taskArray['id_task']);
+    
+        if (!empty($taskArray['dateInit'])) {
+            $task->setDateInit(new DateTime($taskArray['dateInit']));
+        }
+        if (!empty($taskArray['dateDelivered'])) {
+            $task->setDateDelivered(new DateTime($taskArray['dateDelivered']));
+        }
+        if (!empty($taskArray['dateApproved'])) {
+            $task->setDateApproved(new DateTime($taskArray['dateApproved']));
+        }
+        return $task;
+    }
+
 
     public function storeCreatedTask(Task $task) : array { // This funtion is to CREATE in json file
         $taskData = $task->toArray();

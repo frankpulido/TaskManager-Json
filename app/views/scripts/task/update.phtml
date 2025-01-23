@@ -27,6 +27,10 @@ $programmers = ($this->programmers) ?? null;
     <p class="rajdhani-light" style="color: red;"><?= htmlspecialchars($this->error) ?></p>
     <?php endif; ?>
 
+    <?php if ($this->message): ?>
+    <p class="rajdhani-light" style="color: green;"><?= htmlspecialchars($this->message) ?></p>
+    <?php endif; ?>
+
     <div class="rajdhani-light" style="margin: 10px;">
         <!-- Display Task Fields -->
         <p><b>Task ID:</b> <?= htmlspecialchars($task['id_task']); ?></p>

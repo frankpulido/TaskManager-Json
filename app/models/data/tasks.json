@@ -2,7 +2,7 @@
     {
         "id_task": 101,
         "project_id": 1,
-        "programmer_id": 1,
+        "programmer_id": 3,
         "task_kind": "FRONTOFFICE",
         "task_status": "RELEASED",
         "task_description": "Initial front-end setup and layout design.",
@@ -117,30 +117,6 @@
         "dateCreated": "2024-05-01T10:00:00Z",
         "dateInit": "2024-05-05T11:00:00Z",
         "dateDelivered": "2024-05-10T15:30:00Z",
-        "dateApproved": null
-    },
-    {
-        "id_task": 111,
-        "project_id": 1,
-        "programmer_id": "3",
-        "task_kind": "FRONTOFFICE",
-        "task_status": "PIPELINED",
-        "task_description": "New Task for Jeffrey",
-        "dateCreated": "2025-01-22T21:10:00+01:00",
-        "dateInit": null,
-        "dateDelivered": null,
-        "dateApproved": null
-    },
-    {
-        "id_task": 112,
-        "project_id": 1,
-        "programmer_id": "1",
-        "task_kind": "FRONTOFFICE",
-        "task_status": "PIPELINED",
-        "task_description": "Today is Thursday, great!",
-        "dateCreated": "2025-01-23T08:54:37+01:00",
-        "dateInit": null,
-        "dateDelivered": null,
         "dateApproved": null
     }
 ]
