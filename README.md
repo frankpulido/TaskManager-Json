@@ -1,3 +1,6 @@
+# TROUBLESHOOTING file_put_contents "PERMISSION DENIED"
+chmod 666 /Applications/XAMPP/xamppfiles/htdocs/sprint3_json/app/models/data/tasks.json
+
 # GIT HISTORY RETRIEVAL
 
 Sequence to retrieve and graph ALL commit history from all branches, including those deleted locally (git) and/or remotely (GitHub):

@@ -93,6 +93,9 @@ class TaskController extends Controller {
                         foreach($tasks as &$task) {
                             if($task['id_task'] == $id_task) {
                                 $task['programmer_id'] = $updatedData['programmer_id'];
+                                if(isset($_POST['advance_status'])) {
+                                    $task->updateTaskStatus();
+                                }
                                 $message = "Task updated successfully!";
                                 break;
                             }
@@ -114,6 +117,7 @@ class TaskController extends Controller {
     
 
     public function upgradeProgressAction() {
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_task'])) {
             $taskId = (int)$_POST['id_task'];
     
@@ -147,13 +151,12 @@ class TaskController extends Controller {
             //$taskManager->updateTask($taskId, $task->toArray());
     
             // Update session with the modified task
-            $_SESSION['selected_task'] = $task->toArray();
+            //$_SESSION['selected_task'] = $task->toArray();
     
-            // Feedback to the user
-            echo $message;
         }
-    
-        $this->view->render('crudtask/update.php');
+        $this->view->title = 'Task Status Upgrade';
+        $this->view->selected_task = $task->toArray();
+        $this->view->message = $message;
     }
     
 
