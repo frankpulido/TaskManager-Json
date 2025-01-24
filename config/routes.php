@@ -12,6 +12,7 @@
 $routes = array(
     '/' => 'application#index',                      // default route
     '/grid' => 'application#index',                  // index (view_all_in_grid)
+    '/project' => 'application#byproject',           // group tasks by project
     '/kind' => 'application#columnKind',              // column grouped by kind
     '/progress' => 'application#columnProgress',      // column grouped by progress
 
@@ -19,6 +20,5 @@ $routes = array(
     '/task/show' => 'task#show',
     '/task/update' => 'task#update',
     '/task/delete' => 'task#delete',
-    '/task/advance' => 'task#upgradeProgress',
 );
 ?>

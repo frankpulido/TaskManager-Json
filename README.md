@@ -1,7 +1,9 @@
-# TROUBLESHOOTING file_put_contents "PERMISSION DENIED"
+
+
+## TROUBLESHOOTING file_put_contents "PERMISSION DENIED"
 chmod 666 /Applications/XAMPP/xamppfiles/htdocs/sprint3_json/app/models/data/tasks.json
 
-# GIT HISTORY RETRIEVAL
+## GIT HISTORY RETRIEVAL (if used git flow feature start/finish <feature_name> and pushed develop only)
 
 Sequence to retrieve and graph ALL commit history from all branches, including those deleted locally (git) and/or remotely (GitHub):
 
@@ -26,6 +28,7 @@ Remember, while these steps will show most of the history, some information abou
 
 
 -----------
+
 READ, DECIDE AND MERGE ABOVE :
 To see the work through branches with decorations in Git :
 git log --graph --oneline --decorate --all
@@ -51,6 +54,15 @@ git log --walk-reflogs --all
 git log --graph --oneline --decorate $(git rev-list --all --parents --color)
 These commands will show you the history of your work, including on branches that have been deleted after merging.
 
+
+# **************** FROM HERE THE ORIGINAL README OF THE FRAMEWORK DEVELOPER : Nancy Espinosa ****************
+
+Framework Author:
+https://github.com/NancyEspinosa
+https://github.com/Nanx3
+
+Framework repository:
+https://github.com/IT-Academy-BCN/phpInitialDemo
 
 
 # PHP initial Project
