@@ -1,0 +1,54 @@
+<?php
+$title = $this->title;
+?>
+
+<body>
+    <?php
+    $by_project_tasks = $this->tasks;
+    $projects = $this->projects;
+    ?>
+
+<section class="grid-container">
+    <section class="nested-grid rajdhani-light">
+        <?php if (!empty($by_project_tasks)): ?>
+            <?php foreach ($by_project_tasks as $project_id => $tasks): ?>
+
+                <article class="grid-item">
+                    <h3><b> Project ID : <?= htmlspecialchars($project_id) ?> | Title : <?= htmlspecialchars($projects[$project_id]['project_name']) ?> </b></h3>
+
+                    <?php foreach ($tasks as $task): ?>
+
+                        <hr>
+                        <p><b>TASK ID : <?= htmlspecialchars($task['id_task']) ?> | Project ID : <?= htmlspecialchars($task['project_id']) ?> | Programmer ID : <?= htmlspecialchars($task['programmer_id']) ?></b></p>
+                        <p><b><?= htmlspecialchars($task['task_kind']) ?> | Description : <?= htmlspecialchars($task['task_description']) ?></b></p>
+                        <p><b>Task progress : <?= htmlspecialchars($task['task_status']) ?></b></p>
+                        
+                        <?php
+                        if (!empty($task['dateCreated'])) {
+                            echo "<p>Pipelined : " . htmlspecialchars($task['dateCreated']) . "</p>";
+                        }
+                        if (!empty($task['dateInit'])) {
+                            echo "<p>Started : " . htmlspecialchars($task['dateInit']) . "</p>";
+                        }
+                        if (!empty($task['dateDelivered'])) {
+                            echo "<p>Delivered : " . htmlspecialchars($task['dateDelivered']) . "</p>";
+                        }
+                        if (!empty($task['dateApproved'])) {
+                            echo "<p>Released : " . htmlspecialchars($task['dateApproved']) . "</p>";
+                        }
+                        ?>
+
+                    <?php endforeach; ?>
+
+                </article>
+
+            <?php endforeach; ?>
+
+        <?php else: ?>
+            <p>No tasks in in database.</p>
+        <?php endif; ?>
+    </section>
+</section>
+
+</body>
+</html>

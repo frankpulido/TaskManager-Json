@@ -18,6 +18,31 @@ class ApplicationController extends Controller
         $this->view->tasks = $tasks;
     }
 
+    public function byProjectAction()
+    {
+        $tasks = $this->loadData($this->taskFilePath);
+        $projects = $this->loadData($this->projectFilePath);
+        $categorizedTasks = [];
+        $associativeProjects = [];
+
+        foreach ($tasks as $task) {
+            $project_id = (int) $task['project_id'];
+            $categorizedTasks[$project_id][] = $task;
+        }
+
+        foreach ($projects as $project) {
+            $project_id = (int) $project['id_project'];
+            $associativeProjects[$project_id] = $project;
+        }
+
+        ksort($categorizedTasks);
+        ksort($associativeProjects);
+
+        $this->view->title = "View grouped by PROJECT";
+        $this->view->tasks = $categorizedTasks;
+        $this->view->projects = $associativeProjects;
+    }
+
     public function columnKindAction()
     {
         $tasks = $this->loadData($this->taskFilePath);

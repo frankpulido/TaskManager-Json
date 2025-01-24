@@ -142,7 +142,7 @@ final class Task {
         ];
     }
 
-    // METHODS - Upgrade to next stage, not in use at the moment, handled by the TaskController upgradeProgress() method
+    // METHODS - Upgrade to next stage, used by the TaskController upgradeProgress() method
 
     public function updateTaskStatus() : string {
         $date = new DateTime();
