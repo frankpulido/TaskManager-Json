@@ -80,7 +80,7 @@ header{
 }
 .header-container {
     display: grid;
-    grid-template-columns: 1fr 2.5fr 2fr;
+    grid-template-columns: 1fr 3fr 1fr;
     align-items: center; /*I added this and made the changes commenting header above*/
     gap: 10px;
     padding: 0px;

@@ -15,7 +15,7 @@ $title = $this->title;
                 <article class="grid-item">
                     <p><b>TASK ID</b>  : <b><?= htmlspecialchars($task['id_task']) ?></b> | Project ID : <?= htmlspecialchars($task['project_id']) ?> | Programmer ID : <?= htmlspecialchars($task['programmer_id']) ?></p>
                     <p><b><?= htmlspecialchars($task['task_kind']) ?></b> | Description : <?= htmlspecialchars($task['task_description']) ?></p>
-                    <p>Task progress : <?= htmlspecialchars($task['task_status']) ?></p>
+                    <p><b>Task progress : <?= htmlspecialchars($task['task_status']) ?></b></p>
                     
                     <?php
                     if (!empty($task['dateCreated'])) {

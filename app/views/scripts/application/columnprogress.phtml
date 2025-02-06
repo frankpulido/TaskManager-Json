@@ -10,7 +10,7 @@ $title = $this->title;
 <section class="grid-container-cases-4">
     <?php foreach ($categorizedTasks as $progress => $tasks): ?>
         <section class="nested-grid-cases rajdhani-light">
-            <h2><?= ucfirst(strtoupper($progress)) ?></h2>
+            <h2><?= strtoupper($progress) ?></h2>
             <?php if (!empty($tasks)): ?>
                 <?php foreach ($tasks as $task): ?>
                     <article class="grid-item">
